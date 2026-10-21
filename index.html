@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FridgeKeeperr - небольшой помощник для учёта продуктов и контроля сроков годности.">
+    <title>FridgeKeeperr: учёт продуктов</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <header class="topbar">
+        <div class="container topbar__inner">
+            <a class="brand" href="#top" aria-label="FridgeKeeperr - на главную">
+                <span class="brand__mark" aria-hidden="true">FK</span>
+                <span>Fridge<span class="brand__accent">Keeperr</span></span>
+            </a>
+            <span class="topbar__note"><span class="live-dot"></span> Умный список продуктов</span>
+        </div>
+    </header>
+
+    <main id="top" class="container main-content">
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero__copy">
+                <p class="eyebrow">МЕНЬШЕ ПОТЕРЬ. БОЛЬШЕ ПОРЯДКА</p>
+                <h1 id="hero-title">Знай, что в холодильнике.<br><span>Используй вовремя.</span></h1>
+                <p class="hero__description">Добавляй продукты, следи за сроками годности и находи нужное за пару секунд.</p>
+            </div>
+        </section>
+
+        <section class="stats" aria-label="Сводка по продуктам">
+            <article class="stat-card stat-card--total">
+                <span class="stat-card__label">Всего продуктов</span>
+                <div class="stat-card__bottom"><strong id="stat-total">0</strong><span class="stat-icon" aria-hidden="true">▦</span></div>
+            </article>
+            <article class="stat-card stat-card--soon">
+                <span class="stat-card__label">Истекают за 3 дня</span>
+                <div class="stat-card__bottom"><strong id="stat-soon">0</strong><span class="stat-icon" aria-hidden="true">◷</span></div>
+            </article>
+            <article class="stat-card stat-card--expired">
+                <span class="stat-card__label">Срок истёк</span>
+                <div class="stat-card__bottom"><strong id="stat-expired">0</strong><span class="stat-icon" aria-hidden="true">!</span></div>
+            </article>
+        </section>
+
+        <section class="workspace" aria-label="Управление продуктами">
+            <aside class="panel form-panel">
+                <div class="panel-heading">
+                    <div>
+                        <p class="eyebrow">ВАША КЛАДОВАЯ</p>
+                        <h2 id="form-title">Добавить продукт</h2>
+                    </div>
+                    <span class="heading-icon" aria-hidden="true">＋</span>
+                </div>
+                <form id="product-form" novalidate>
+                    <div class="field">
+                    <label for="product-name">Название</label>
+                    <input id="product-name" name="name" type="text" maxlength="60" placeholder="Например, томатный соус" required>
+                    <small class="field-error" id="name-error"></small>
+                    </div>
+                    <div class="field-row">
+                    <div class="field">
+                        <label for="product-category">Категория</label>
+                        <select id="product-category" name="category" required>
+                            <option value="Овощи и фрукты">Овощи и фрукты</option>
+                            <option value="Молочные продукты">Молочные</option>
+                            <option value="Мясо и рыба">Мясо и рыба</option>
+                            <option value="Соусы и специи" selected>Соусы и специи</option>
+                            <option value="Бакалея">Бакалея</option>
+                            <option value="Другое">Другое</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="product-quantity">Количество, шт.</label>
+                        <input id="product-quantity" name="quantity" type="number" min="1" max="999" value="1" required>
+                    </div>
+                    </div>
+                    <div class="field">
+                        <label for="product-expiry">Годен до</label>
+                        <input id="product-expiry" name="expiry" type="date" required>
+                        <small class="field-hint">Можно добавить и продукт с уже истёкшим сроком</small>
+                        <small class="field-error" id="expiry-error"></small>
+                    </div>
+                    <button class="btn btn--primary form-submit" id="submit-button" type="submit">Добавить продукт <span aria-hidden="true">↗</span></button>
+                    <button class="btn btn--text is-hidden" id="cancel-edit" type="button">Отменить редактирование</button>
+                </form>
+                <div class="privacy-note"><span aria-hidden="true">i</span><p>Данные сохраняются в этом браузере. Сервер и регистрация не нужны.</p></div>
+            </aside>
+
+            <section class="panel inventory-panel" aria-labelledby="inventory-title">
+                <div class="inventory-heading">
+                    <div>
+                    <p class="eyebrow">ВАШ СПИСОК</p>
+                    <h2 id="inventory-title">Продукты <span id="visible-count">0</span></h2>
+                    </div>
+                    <label class="sort-control" for="sort-products"><span>Сортировка</span>
+                    <select id="sort-products">
+                        <option value="expiry">По сроку</option>
+                        <option value="name">По названию</option>
+                    </select>
+                    </label>
+                </div>
+
+                <label class="search-box" for="search-products">
+                    <span aria-hidden="true">⌕</span>
+                    <input id="search-products" type="search" placeholder="Найти продукт..." autocomplete="off">
+                </label>
+
+                <div class="filter-tabs" role="group" aria-label="Фильтр продуктов">
+                    <button class="filter-tab is-active" type="button" data-filter="all" aria-pressed="true">Все</button>
+                    <button class="filter-tab" type="button" data-filter="soon" aria-pressed="false">Скоро истекают</button>
+                    <button class="filter-tab" type="button" data-filter="expired" aria-pressed="false">Просрочены</button>
+                </div>
+
+                <div id="product-list" class="product-list" aria-live="polite"></div>
+                <div id="empty-state" class="empty-state is-hidden">
+                    <span class="empty-state__icon" aria-hidden="true">⌕</span>
+                    <h3>Ничего не найдено</h3>
+                    <p>Попробуй изменить запрос или добавить новый продукт.</p>
+                </div>
+                <div id="toast" class="toast" role="status" aria-live="polite"></div>
+            </section>
+        </section>
+
+        <footer class="app-footer">
+            <span>FridgeKeeperr. Учебный проект на JavaScript</span>
+            <span>Сохраняй продукты, а не только список покупок.</span>
+        </footer>
+    </main>
+</body>
+</html>
