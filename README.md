@@ -1,4 +1,4 @@
-# JavaScript-project-1 - FridgeKeeperr
+# FridgeKeeperr
 
 Небольшой портфолио-проект на **HTML, CSS и JavaScript** для учёта продуктов и контроля сроков годности.
 
